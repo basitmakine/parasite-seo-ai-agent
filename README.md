@@ -10,7 +10,7 @@
 
 Automate your parasite SEO strategy across Medium, Dev.to, LinkedIn, Reddit, RapidAPI, WordPress, and any platform using AI-powered browser automation. Post hundreds of SEO-optimized articles to high-authority domains without writing a single line of code.
 
-![Parasite SEO Browser Automation Workflow](https://taskagi.net/resources/images/agents/github-parasite-seo-ai-agent.png)
+![Parasite SEO Browser Automation Workflow](https://taskagi.net/resources/images/agents/parasite-seo-ai-agent.png)
 
 ---
 
