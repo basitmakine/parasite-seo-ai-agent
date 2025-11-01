@@ -1,0 +1,320 @@
+{
+  "slug": "parasite-seo-ai-agent-deployed",
+  "user_id": 1,
+  "name": "Parasite SEO AI Agent (Deployed)",
+  "description": "Automate parasite SEO content creation and publishing at scale. Uses AI to generate SEO-optimized articles and browser automation to post them to any website - no API required. Pre-configured for RapidAPI but easily customizable for Medium, Dev.to, LinkedIn, Reddit, or any platform.",
+  "hero_tagline": null,
+  "hero_image_url": null,
+  "features_main_title": null,
+  "features_list": [],
+  "how_it_works_steps": [],
+  "demo_section_type": null,
+  "faq_data": [],
+  "testimonials_data": [],
+  "icon_url": "https://www.google.com/s2/favicons?domain=sheets.google.com&sz=32",
+  "category": null,
+  "tags": [],
+  "workflow_definition": {
+    "nodes": [
+      {
+        "id": "1",
+        "name": "Get Sheet from URL",
+        "type": "googlesheets",
+        "integration_instance_id": null,
+        "operation": "getSheetFromUrl",
+        "config": {
+          "integration_instance_id": null,
+          "sheet_url": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit",
+          "range": null
+        },
+        "position_x": 571,
+        "position_y": 354
+      },
+      {
+        "id": "2",
+        "name": "Loop Through Draft Articles",
+        "type": "core",
+        "integration_instance_id": null,
+        "operation": "loop",
+        "config": {
+          "mode": "until",
+          "items": "[[nodes.2590.rows]]",
+          "untilCondition": {
+            "leftValue": "loop.item.field",
+            "fieldPath": "[1]",
+            "operator": "contains",
+            "rightValue": "DRAFT"
+          },
+          "outputMode": "last",
+          "maxIterations": "1000"
+        },
+        "position_x": 910,
+        "position_y": 359
+      },
+      {
+        "id": "3",
+        "name": "Generate SEO Content with AI",
+        "type": "anthropic",
+        "integration_instance_id": null,
+        "operation": "createMessage",
+        "config": {
+          "integration_instance_id": null,
+          "prompt": "You are an expert SEO content writer. Write a focused, high-value article about \"[[loop.current_item.0]]\" that reads naturally while being perfectly optimized for search engines. This is going to be a parasite content around 300 words.\n\n## WRITING STYLE REQUIREMENTS\n\n### Tone & Voice\n- Write like a knowledgeable human, not a robot\n- Skip generic intros - get straight to the value\n- No corporate fluff like \"in todays digital landscape\" or \"revolutionizing the industry\"\n- Use simple, direct language that real people use\n- Include personality and opinions where appropriate\n- Write the way experts actually talk about the topic",
+          "model": "claude-sonnet-4-5-20250929",
+          "temperature": "0.7",
+          "max_tokens": "2000",
+          "system_prompt": null
+        },
+        "position_x": 1272,
+        "position_y": 363
+      },
+      {
+        "id": "4",
+        "name": "Login and Navigate to Posting Page",
+        "type": "browserautomation",
+        "integration_instance_id": null,
+        "operation": "performWebTask",
+        "config": {
+          "sessionId": null,
+          "url": "https://rapidapi.com/auth/login",
+          "prompt": "Go to https://rapidapi.com/auth/login and enter these credentials YOUR_EMAIL / YOUR_PASSWORD then hit the enter button.\n\nWait for the home page to load.\n\nThen go to https://rapidapi.com/YOUR_USERNAME/api/YOUR_API_NAME/tutorials and click on \"add tutorials\" or \"add tutorial\", whichever is present.\n\nthen post this in the form:\n\nTitle is [[loop.current_item.0]]\nas the content, just click on the content section to focus the form and finish the task.",
+          "agent": "browser-use",
+          "provider": "openai",
+          "highlightElements": false
+        },
+        "position_x": 1621,
+        "position_y": 358
+      },
+      {
+        "id": "5",
+        "name": "Wait for Page Load",
+        "type": "core",
+        "integration_instance_id": null,
+        "operation": "wait",
+        "config": {
+          "waitSeconds": "5"
+        },
+        "position_x": 1897,
+        "position_y": 170
+      },
+      {
+        "id": "6",
+        "name": "Paste AI-Generated Content",
+        "type": "browserautomation",
+        "integration_instance_id": null,
+        "operation": "pasteText",
+        "config": {
+          "sessionId": "[[nodes.2593.sessionId]]",
+          "text": "[[nodes.2592.content]]"
+        },
+        "position_x": 1897,
+        "position_y": 369
+      },
+      {
+        "id": "7",
+        "name": "Wait for Content to Paste",
+        "type": "core",
+        "integration_instance_id": null,
+        "operation": "wait",
+        "config": {
+          "waitSeconds": "5"
+        },
+        "position_x": 1897,
+        "position_y": 592
+      },
+      {
+        "id": "8",
+        "name": "Save and Publish",
+        "type": "browserautomation",
+        "integration_instance_id": null,
+        "operation": "performWebTask",
+        "config": {
+          "sessionId": "[[nodes.2595.sessionId]]",
+          "url": null,
+          "prompt": "Click on the \"Save\" button. if task is done, return the word successfully, if not, just a single word \"error\"",
+          "agent": "browser-use",
+          "provider": "openai",
+          "highlightElements": true
+        },
+        "position_x": 2251,
+        "position_y": 359
+      },
+      {
+        "id": "9",
+        "name": "Check if Published Successfully",
+        "type": "core",
+        "integration_instance_id": null,
+        "operation": "if_condition",
+        "config": {
+          "conditions": [
+            {
+              "dataType": "string",
+              "value1": "[[nodes.2597.result]]",
+              "operator": "contains",
+              "value2": "successfully"
+            }
+          ],
+          "combine": "AND",
+          "actions": {
+            "onTrue": "next",
+            "onFalse": "next"
+          }
+        },
+        "position_x": 2559,
+        "position_y": 380
+      },
+      {
+        "id": "10",
+        "name": "Find Article Row in Sheet",
+        "type": "googlesheets",
+        "integration_instance_id": null,
+        "operation": "searchInSheet",
+        "config": {
+          "integration_instance_id": null,
+          "sheet_url": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit",
+          "search_value": "[[loop.current_item.0]]",
+          "search_range": null,
+          "exact_match": true
+        },
+        "position_x": 2276,
+        "position_y": 666
+      },
+      {
+        "id": "11",
+        "name": "Update Status to PUBLISHED",
+        "type": "googlesheets",
+        "integration_instance_id": null,
+        "operation": "updateCell",
+        "config": {
+          "integration_instance_id": null,
+          "sheet_url": "https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit",
+          "rowNumber": "[[nodes.2599.matches.0.row]]",
+          "columnLetter": "B",
+          "value": "PUBLISHED",
+          "sheetName": null
+        },
+        "position_x": 2284,
+        "position_y": 878
+      },
+      {
+        "id": "12",
+        "name": "Stop if Publishing Failed",
+        "type": "core",
+        "integration_instance_id": null,
+        "operation": "no_operation",
+        "config": {
+          "stopMessage": "Publishing failed - status remains DRAFT",
+          "includeInputData": false,
+          "logLevel": "info"
+        },
+        "position_x": 2750,
+        "position_y": 707
+      }
+    ],
+    "connections": [
+      {
+        "source_node_id": "1",
+        "source_output": null,
+        "target_node_id": "2",
+        "target_input": null
+      },
+      {
+        "source_node_id": "2",
+        "source_output": null,
+        "target_node_id": "3",
+        "target_input": null
+      },
+      {
+        "source_node_id": "3",
+        "source_output": null,
+        "target_node_id": "4",
+        "target_input": null
+      },
+      {
+        "source_node_id": "4",
+        "source_output": null,
+        "target_node_id": "5",
+        "target_input": null
+      },
+      {
+        "source_node_id": "5",
+        "source_output": null,
+        "target_node_id": "6",
+        "target_input": null
+      },
+      {
+        "source_node_id": "6",
+        "source_output": null,
+        "target_node_id": "7",
+        "target_input": null
+      },
+      {
+        "source_node_id": "7",
+        "source_output": null,
+        "target_node_id": "8",
+        "target_input": null
+      },
+      {
+        "source_node_id": "8",
+        "source_output": null,
+        "target_node_id": "9",
+        "target_input": null
+      },
+      {
+        "source_node_id": "9",
+        "source_output": "true_path",
+        "target_node_id": "10",
+        "target_input": null
+      },
+      {
+        "source_node_id": "10",
+        "source_output": null,
+        "target_node_id": "11",
+        "target_input": null
+      },
+      {
+        "source_node_id": "9",
+        "source_output": "false_path",
+        "target_node_id": "12",
+        "target_input": null
+      }
+    ]
+  },
+  "required_integrations": [
+    "googlesheets",
+    "anthropic",
+    "browserautomation"
+  ],
+  "is_premium": false,
+  "usage_count": 0,
+  "draft": true,
+  "version": "1.0.0",
+  "setup_guide": null,
+  "_export_metadata": {
+    "exported_at": "2025-11-01T07:34:40.067047Z",
+    "exported_by": "cem",
+    "source_agent_id": 1081,
+    "source_agent_name": "Parasite SEO AI Agent (Deployed)",
+    "node_id_mapping": {
+      "2590": "1",
+      "2591": "2",
+      "2592": "3",
+      "2593": "4",
+      "2594": "5",
+      "2595": "6",
+      "2596": "7",
+      "2597": "8",
+      "2598": "9",
+      "2599": "10",
+      "2600": "11",
+      "2601": "12"
+    },
+    "total_nodes": 12,
+    "total_connections": 11,
+    "integration_types": [
+      "googlesheets",
+      "anthropic",
+      "browserautomation"
+    ]
+  }
+}
