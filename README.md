@@ -10,7 +10,7 @@
 
 Automate your parasite SEO strategy across Medium, Dev.to, LinkedIn, Reddit, RapidAPI, WordPress, and any platform using AI-powered browser automation. Post hundreds of SEO-optimized articles to high-authority domains without writing a single line of code.
 
-![Parasite SEO Browser Automation Workflow](https://taskagi.net/storage/images/agents/github-parasite-seo-ai-agent.png)
+![Parasite SEO Browser Automation Workflow](https://taskagi.net/resources/images/agents/github-parasite-seo-ai-agent.png)
 
 ---
 
@@ -24,7 +24,7 @@ This breakthrough approach means you can now automate parasite SEO campaigns on 
 
 **Deploy this agent with TaskAGI's 1-click deployment feature** and start building high-quality backlinks on authority domains within minutes. No coding required, no API limitations, unlimited platform compatibility.
 
-👉 **[Deploy on TaskAGI.net](https://taskagi.net/agents/parasite-seo-ai-agent-deployed)**
+👉 **[Deploy on TaskAGI.net](https://taskagi.net/agent/parasite-seo-ai-agent-deployed)**
 
 ---
 
@@ -124,7 +124,7 @@ Your tracking spreadsheet must include these columns:
 
 ### Step 1: Access the Agent on TaskAGI
 
-1. Visit the agent landing page: **[Parasite SEO AI Agent](https://taskagi.net/agents/parasite-seo-ai-agent-deployed)**
+1. Visit the agent landing page: **[Parasite SEO AI Agent](https://taskagi.net/agent/parasite-seo-ai-agent-deployed)**
 2. Log in to your TaskAGI account (or create one if you don't have an account)
 3. Review the agent overview and workflow diagram
 
